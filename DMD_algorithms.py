@@ -18,16 +18,16 @@ def DMD(data,polytype,polyorder):
 def eDMD(data,polytype,polyorder):
     n, m, l = data.shape
     
-    import Observables
-    transformation = getattr(Observables, polytype)
-    psi_data = transformation(data,polyorder)
+    import Observables #importing observables module for eDMD
+    transformation = getattr(Observables, polytype) #desire function for observable
+    psi_data = transformation(data,polyorder) #lifted space
     
-    nl = psi_data.shape[0]
+    nl = psi_data.shape[0] #dimension of lifted space
     
     psi_X = np.reshape(psi_data[:,:-1,:],(nl,(m-1)*l))
     psi_Y = np.reshape(psi_data[:,1:,:],(nl,(m-1)*l))
     
-#     def mat_summ(X,Y):
+#     def mat_summ(X,Y): #Refer Williams: Extedning DMD, 2015
 #         n, m = X.shape
 #         Z = np.zeros([n,n])
 #         for i in np.arange(m):
@@ -38,7 +38,7 @@ def eDMD(data,polytype,polyorder):
 #     G = mat_summ(psi_X,psi_X)
 #     A = mat_summ(psi_X,psi_Y)
     
-    K = psi_Y @ np.linalg.pinv(psi_X)
+    K = psi_Y @ np.linalg.pinv(psi_X) #the 2-norm minimized over the trajectory is the frobenius norm
     
     return K
 

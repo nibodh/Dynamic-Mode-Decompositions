@@ -42,7 +42,7 @@ def Glycoscillator(species,t):
     
     return speciesdot
 
-def Repressilator(species,t):
+def Repressilator(species,t): #This is tradiationally 3 genes and their 3 proteins but can be extended to n dimensions
     #constants
     kdm = 1
     kdp = 1

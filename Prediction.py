@@ -35,7 +35,7 @@ def N_step(K,data):  #basically applying powers of K
     
     data_est = np.empty([n,m-1,l]) #initializing empty array b/c stupid python can't do it by itself
     data_init = data_p[:,0,:] #intial conditions
-    for i in np.arange(m-1):
+    for i in np.arange(m-1):  #each time stamp to take a power of the dynamics matrix to predict trajectory at that time
         data_est[:,i,:] = np.squeeze(np.transpose(np.matmul(np.transpose(np.repeat(np.linalg.matrix_power(K,(i+1))[:,:,np.newaxis],l,axis = 2),(2, 0, 1)), np.transpose(data_init[:,:,np.newaxis],(1,0,2))),(1,2,0)),axis = 1)
         #substitute for the above stupid python expression is broken down below
         

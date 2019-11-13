@@ -8,7 +8,13 @@ import numpy as np
 from itertools import combinations_with_replacement #equivalent to (n+k-1)_c_(k-1)
 
 def Monomials(data, polyorder):
-    n, m, l = data.shape
+    
+    if data.ndim == 2:
+        n, m = data.shape
+        l = 1
+    else:
+        n, m, l = data.shape
+        
     psi_data = data
     if polyorder > 1:
         psi_data = np.append(psi_data,np.ones((1,m,l)),axis = 0) #Adding 0 order polynomials and 1s
@@ -25,7 +31,12 @@ def Monomials(data, polyorder):
 def Hermite(data, polyorder):
     from numpy.polynomial.hermite_e import hermeval    #importing hermeval from hermite class
     
-    n, m, l = data.shape
+    if data.ndim == 2:
+        n, m = data.shape
+        l = 1
+    else:
+        n, m, l = data.shape
+        
     psi_data = data
     if polyorder > 1:
         psi_data = np.append(psi_data,np.ones((1,m,l)),axis = 0)
@@ -50,7 +61,12 @@ def Hermite(data, polyorder):
 def Legendre(data, polyorder):
     from numpy.polynomial.legendre import legval    #importing legval from legendre class
     
-    n, m, l = data.shape
+    if data.ndim == 2:
+        n, m = data.shape
+        l = 1
+    else:
+        n, m, l = data.shape
+        
     psi_data = data
     if polyorder > 1:
         psi_data = np.append(psi_data,np.ones((1,m,l)),axis = 0)

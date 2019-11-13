@@ -5,7 +5,7 @@
 
 
 import numpy as np
-from itertools import combinations_with_replacement as choose 
+from itertools import combinations_with_replacement #equivalent to (n+k-1)_c_(k-1)
 
 def Monomials(data, polyorder):
     n, m, l = data.shape
@@ -13,7 +13,7 @@ def Monomials(data, polyorder):
     if polyorder > 1:
         psi_data = np.append(psi_data,np.ones((1,m,l)),axis = 0) #Adding 0 order polynomials and 1s
         for i in np.arange(2,polyorder + 1):  #taking combinations possible
-            for j in choose(np.arange(n),i):  #iterating through eeach combination
+            for j in combinations_with_replacement(np.arange(n),i):  #at each power, there are (p+n-1)_c_(n-1) solutions
                 prod = 1
                 for k in j: #iterating through states for combination
                     prod = prod*data[k,:,:] #multiplying each state for that combination

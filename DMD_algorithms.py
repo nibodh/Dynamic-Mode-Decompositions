@@ -8,11 +8,10 @@
 import numpy as np
 
 def DMD(data,polytype,polyorder): #polytype and polyorder unused
+    
     if data.ndim == 2:
-        n, m = data.shape
-        l = 1
-    else:
-        n, m, l = data.shape
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
 
     X = np.reshape(data[:,:-1,:],(n,(m-1)*l)) # reshaping data_p to bring all trajectories into one dimension
     Y = np.reshape(data[:,1:,:],(n,(m-1)*l)) # reshaping data_f to bring all trajectories into one dimension
@@ -21,11 +20,10 @@ def DMD(data,polytype,polyorder): #polytype and polyorder unused
     return K
 
 def eDMD(data,polytype,polyorder):
+    
     if data.ndim == 2:
-        n, m = data.shape
-        l = 1
-    else:
-        n, m, l = data.shape
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
     
     import Observables #importing observables module for eDMD
     transformation = getattr(Observables, polytype) #desire function for observable
@@ -52,14 +50,13 @@ def eDMD(data,polytype,polyorder):
     return K
 
 def HankelDMD(data,polytype,polyorder): #polytype and polyorder unused
+    
     if data.ndim == 2:
-        n, m = data.shape
-        l = 1
-    else:
-        n, m, l = data.shape   #num of time points  #num of states #num of trajectories
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape   #num of time points  #num of states #num of trajectories
     
     #Construct Hankel delay matrices per observable
-    k = 20 #guessed value for dimension of K-invariant subspace
+    k = 20 #guessed value for dimension of K-invariant subspace, should create an optimization routine
     p = (m-1)//k #based on size of column, number of columns is obtained
     
     #Contructing Hankel matrices:

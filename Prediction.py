@@ -9,10 +9,8 @@ import numpy as np
 def one_step(K,data):  #basically applying K
     
     if data.ndim == 2:
-        n, m = data.shape
-        l = 1
-    else:
-        n, m, l = data.shape
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
     
     data_p = data[:,:-1,:] #present
     data_f = data[:,1:,:] #forwarded
@@ -33,11 +31,10 @@ def one_step(K,data):  #basically applying K
     return data_est, MSE_error
 
 def N_step(K,data):  #basically applying powers of K
+    
     if data.ndim == 2:
-        n, m = data.shape
-        l = 1
-    else:
-        n, m, l = data.shape
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
     
     data_p = data[:,:-1,:] #present
     data_f = data[:,1:,:] #forwarded

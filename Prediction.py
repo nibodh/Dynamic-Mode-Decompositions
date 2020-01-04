@@ -6,7 +6,12 @@
 
 import numpy as np
 
-def one_step(K,data):  #basically applying K
+def one_step(K,data, poly_type, poly_order):  #basically applying K
+    if poly_order > 1:
+        num_states = data.shape[0]
+        import Observables #importing observables module
+        transformation = getattr(Observables, poly_type) #function to make the desired observable
+        data = transformation(data,poly_order)
     
     if data.ndim == 2:
         data = data[:,:,np.newaxis]
@@ -24,13 +29,18 @@ def one_step(K,data):  #basically applying K
 #     K_times_X = np.matmul(K_transpose, data_p_transpose)
 #     data_est = np.transpose(K_times_X,(1, 2, 0))
     
-    Y_est = np.reshape(data_est,(n,(m-1)*l))
-    Y = np.reshape(data_f,(n,(m-1)*l))
+    Y_est = np.reshape(data_est,(n,(m-1)*l))[:num_states,:]
+    Y = np.reshape(data_f,(n,(m-1)*l))[:num_states,:]
     MSE_error = np.linalg.norm(Y_est - Y, 'fro')/np.linalg.norm(Y,'fro')
     
-    return data_est, MSE_error
+    return data_est[:num_states,:,:], MSE_error
 
-def N_step(K,data):  #basically applying powers of K
+def N_step(K,data, poly_type, poly_order):  #basically applying powers of K
+    if poly_order > 1:
+        num_states = data.shape[0]
+        import Observables #importing observables module
+        transformation = getattr(Observables, poly_type) #function to make the desired observable
+        data = transformation(data,poly_order)
     
     if data.ndim == 2:
         data = data[:,:,np.newaxis]
@@ -55,9 +65,9 @@ def N_step(K,data):  #basically applying powers of K
 #         siz = K_times_X.shape
 #         data_est[:,i,:] = np.squeeze(np.transpose(K_times_X,(1,2,0)),axis = 1)
     
-    Y_est = np.reshape(data_est,(n,(m-1)*l))
-    Y = np.reshape(data_f,(n,(m-1)*l))
+    Y_est = np.reshape(data_est,(n,(m-1)*l))[:num_states,:]
+    Y = np.reshape(data_f,(n,(m-1)*l))[:num_states,:]
     MSE_error = np.linalg.norm(Y_est - Y, 'fro')/np.linalg.norm(Y,'fro')
     
-    return data_est, MSE_error
+    return data_est[:num_states,:,:], MSE_error
 

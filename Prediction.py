@@ -33,7 +33,7 @@ def one_step(K,data, poly_type, poly_order):  #basically applying K
     Y = np.reshape(data_f,(n,(m-1)*l))[:num_states,:]
     MSE_error = np.linalg.norm(Y_est - Y, 'fro')/np.linalg.norm(Y,'fro')
     
-    return data_est[:num_states,:,:], MSE_error
+    return data_est, MSE_error
 
 def N_step(K,data, poly_type, poly_order):  #basically applying powers of K
     if poly_order > 1:
@@ -69,5 +69,5 @@ def N_step(K,data, poly_type, poly_order):  #basically applying powers of K
     Y = np.reshape(data_f,(n,(m-1)*l))[:num_states,:]
     MSE_error = np.linalg.norm(Y_est - Y, 'fro')/np.linalg.norm(Y,'fro')
     
-    return data_est[:num_states,:,:], MSE_error
+    return data_est, MSE_error
 

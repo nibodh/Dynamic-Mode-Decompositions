@@ -56,7 +56,13 @@ def HankelDMD(data,polytype,polyorder): #polytype and polyorder unused
     n, m, l = data.shape   #num of time points  #num of states #num of trajectories
     
     #Construct Hankel delay matrices per observable
-    k = 20 #guessed value for dimension of K-invariant subspace, should create an optimization routine
+    
+    #Below is a temporary estimte of k
+    import Observables #importing observables module for eDMD
+    transformation = getattr(Observables, polytype) #desire function for observable
+    psi_data = transformation(data,polyorder) #lifted space
+    
+    k = psi_data.shape[0] #guessed value for dimension of K-invariant subspace, should create an optimization routine
     p = (m-1)//k #based on size of column, number of columns is obtained
     
     #Contructing Hankel matrices:

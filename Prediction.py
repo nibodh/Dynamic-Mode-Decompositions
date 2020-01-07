@@ -6,17 +6,16 @@
 
 import numpy as np
 
-def one_step(data, K, DMD_type, poly_type, poly_order):  #basically applying K
+def one_step(data, K, poly_type, poly_order):  #basically applying K
     if data.ndim == 2:
         data = data[:,:,np.newaxis]
     n, m, l = data.shape
     nl = n
     
-    if DMD_type != 'DMD':
-        import Observables #importing observables module for eDMD
-        transformation = getattr(Observables, poly_type) #desire function for observable
-        data = transformation(data,poly_order) #lifted space
-        nl = data.shape[0] #dimension of lifted space
+    import Observables #importing observables module for eDMD
+    transformation = getattr(Observables, poly_type) #desire function for observable
+    data = transformation(data,poly_order) #lifted space
+    nl = data.shape[0] #dimension of lifted space
     
     data_p = data[:,:-1,:] #present
     data_f = data[:,1:,:] #forwarded
@@ -36,17 +35,16 @@ def one_step(data, K, DMD_type, poly_type, poly_order):  #basically applying K
     
     return data_est, MSE_error
 
-def N_step(data, K, DMD_type, poly_type, poly_order):  #basically applying powers of K
+def N_step(data, K, poly_type, poly_order):  #basically applying powers of K
     if data.ndim == 2:
         data = data[:,:,np.newaxis]
     n, m, l = data.shape
     nl = n
     
-    if DMD_type != 'DMD':
-        import Observables #importing observables module for eDMD
-        transformation = getattr(Observables, poly_type) #desire function for observable
-        data = transformation(data,poly_order) #lifted space
-        nl = data.shape[0] #dimension of lifted space
+    import Observables #importing observables module for eDMD
+    transformation = getattr(Observables, poly_type) #desire function for observable
+    data = transformation(data,poly_order) #lifted space
+    nl = data.shape[0] #dimension of lifted space
     
     data_p = data[:,:-1,:] #present
     data_f = data[:,1:,:] #forwarded

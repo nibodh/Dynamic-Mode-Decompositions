@@ -57,20 +57,21 @@ def HankelDMD(data,polytype,polyorder): #polytype and polyorder unused
     
     #Construct Hankel delay matrices per observable
     
-    #Below is a temporary estimte of k
+    #Below is a temporary estimte of k ############# This will be used as the intial guess to look at the number of 0 singular values so that the k may be increased if none and decreased if many 
     import Observables #importing observables module for eDMD
     transformation = getattr(Observables, polytype) #desire function for observable
     psi_data = transformation(data,polyorder) #lifted space
     
     k = psi_data.shape[0] #guessed value for dimension of K-invariant subspace, should create an optimization routine
-    p = (m-1)//k #based on size of column, number of columns is obtained
+    p = (m-1)//k #based on size of column, max number of columns is obtained
+    discard = (m-1) - k*p #number of last time points ignored ignored to build a Hankel data matrix
     
     #Contructing Hankel matrices:
     
     #separating data into present and future
     #reshaping each onbservables of trajectory into Hankel matrix per state per trajectory and transposing
-    H_X = np.transpose(np.reshape(data[:,:-1,:],(n,k,p,l)),(1,2,0,3)) #storing X data for reshaping
-    H_Y = np.transpose(np.reshape(data[:,1:,:],(n,k,p,l)),(1,2,0,3))  #storing Y data for reshaping
+    H_X = np.transpose(np.reshape(data[:,:m-1-discard,:],(n,k,p,l)),(1,2,0,3)) #storing X data for reshaping
+    H_Y = np.transpose(np.reshape(data[:,1:m-discard,:],(n,k,p,l)),(1,2,0,3))  #storing Y data for reshaping
     #scaling according to norm of the last column of each of the Hankel matrix
     alpha = np.linalg.norm(H_X[:,-1,:,:],axis = 0)/np.linalg.norm(H_X[:,-1,0,0]) #calculating norm of last column of each trajectory's H_X and scaling them all with that of the first H_X
     

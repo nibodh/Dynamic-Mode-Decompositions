@@ -65,3 +65,11 @@ def Repressilator(species,t): #This is tradiationally 3 genes and their 3 protei
     
     return speciesdot
 
+def Duffing(x,t):
+    
+    delta = 0.5
+
+    x_1_dot = x[1]
+    x_2_dot = -delta*x[1] - x[0]*(x[0]**2 - 1)
+ 
+    return [x_1_dot, x_2_dot]

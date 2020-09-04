@@ -49,5 +49,5 @@ def N_step(data, K_t, C_t, basis_type, basis_order):  #K_t comes in as TRANSPOSE
     Y = np.reshape(data_f,(n,(m-1)*l))
     MSE_error = np.linalg.norm(Y_est - Y, 'fro')/np.linalg.norm(Y,'fro')
     
-    return Y_est, MSE_error
+    return np.reshape(Y_est,(n,m-1,l)), MSE_error
 

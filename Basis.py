@@ -62,20 +62,97 @@ def Legendre(data, basis_order):
 #             psi_data = np.append(psi_data,legend(data,i),axis = 0)
     return psi_data
 
-# def spatial_RBF(data, basis_order):
+def ThinPlate(data, basis_order):
     
-#     return psi_data
+    if data.ndim == 2:
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
     
-# def centered_RBF(data, basis_order):
+    x_max = 2.2
+    x_min = -2.2
     
-#     if data.ndim == 2:
-#         data = data[:,:,np.newaxis]
-#     n, m, l = data.shape
+    basis_order = np.int(np.ceil(basis_order**(1./n))) #taking the nth root and assigning that as basis order across each dimension
     
-#     basis_order = m*l*n
+    psi_data = np.ones((1,m,l)) #initializing constant function
     
-#     psi_data = np.empty([basis_order,m,l])
-#     for i in np.arange(0,basis_order):
-#         psi_data(i,:,:)
-       
-#     return psi_data
+    for i in np.arange(n): #In each dimension
+        centers = np.linspace(x_min,x_max,basis_order) #RBF centers along each dimension
+        for j in np.arange(basis_order):
+            r = np.absolute(data[i,:,:] - centers[j]) #computing value of RBFs per dimension with 
+            psi_x = np.log(r) * np.square(r)
+            psi_x[np.isnan(psi_x)] = 0 #checks all nan to 0
+            psi_data = np.append(psi_data, psi_x[np.newaxis,:,:], axis = 0)
+            
+    return psi_data
+    
+def RBF(data, basis_order):
+    
+    if data.ndim == 2:
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
+    
+    epsilon = 5
+    
+    x_max = 2.2
+    x_min = -2.2
+    
+    basis_order = np.int(np.ceil(basis_order**(1./n))) #taking the nth root and assigning that as basis order across each dimension
+    
+    psi_data = np.ones((1,m,l)) #initializing constant function
+    
+    for i in np.arange(n): #In each dimension
+        centers = np.linspace(x_min,x_max,basis_order) #RBF centers along each dimension
+        for j in np.arange(basis_order):
+            r = np.absolute(data[i,:,:] - centers[j]) #computing value of RBFs per dimension with 
+            psi_x = np.exp(-1 * (epsilon**2) *np.square(r))
+            psi_data = np.append(psi_data, psi_x[np.newaxis,:,:], axis = 0)
+            
+    return psi_data
+    
+def Polyharmonic(data, basis_order):
+    
+    if data.ndim == 2:
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
+    
+    k = 2
+    
+    x_max = 2.2
+    x_min = -2.2
+    
+    basis_order = np.int(np.ceil(basis_order**(1./n))) #taking the nth root and assigning that as basis order across each dimension
+    
+    psi_data = np.ones((1,m,l)) #initializing constant function
+    
+    for i in np.arange(n): #In each dimension
+        centers = np.linspace(x_min,x_max,basis_order) #RBF centers along each dimension
+        for j in np.arange(basis_order):
+            r = np.absolute(data[i,:,:] - centers[j]) #computing value of RBFs per dimension with 
+            psi_x = np.log(np.power(r,r)) * np.power(r,k-1)
+            psi_x[np.isnan(psi_x)] = 0 #checks all nan to 0
+            psi_data = np.append(psi_data, psi_x[np.newaxis,:,:], axis = 0)
+            
+    return psi_data
+
+def Wendland(data, basis_order):
+    
+    if data.ndim == 2:
+        data = data[:,:,np.newaxis]
+    n, m, l = data.shape
+    
+    x_max = 2.2
+    x_min = -2.2
+    
+    basis_order = np.int(np.ceil(basis_order**(1./n))) #taking the nth root and assigning that as basis order across each dimension
+    
+    psi_data = np.ones((1,m,l)) #initializing constant function
+    
+    for i in np.arange(n): #In each dimension
+        centers = np.linspace(x_min,x_max,basis_order)
+        for j in np.arange(basis_order):
+            r = np.absolute(data[i,:,:] - centers[j])
+            r[r > 1] = 0
+            psi_x = np.power(1-r,4) * (1 + 4*r)
+            psi_data = np.append(psi_data, psi_x[np.newaxis,:,:], axis = 0)
+            
+    return psi_data
